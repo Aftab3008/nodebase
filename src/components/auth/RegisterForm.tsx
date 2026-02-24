@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/card";
 import { Field, FieldError, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
-import { authClient } from "@/lib/auth-client";
+import { authClient } from "@/lib/auth/auth-client";
 import { RegisterSchema, RegisterSchemaType } from "@/lib/schema/auth.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2 } from "lucide-react";
@@ -183,7 +183,7 @@ export default function RegisterForm() {
               <div className="text-sm text-center">
                 Already have an account?{" "}
                 <Link
-                  href="/auth/sign-in"
+                  href="/auth/signin"
                   className="underline underline-offset-4 text-primary"
                 >
                   Sign in

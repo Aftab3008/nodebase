@@ -1,4 +1,5 @@
-import { auth } from "@/lib/auth";
+import { auth } from "@/lib/auth/auth";
+import { polarClient } from "@/lib/payments/polar";
 import { TRPCError, initTRPC } from "@trpc/server";
 import { headers } from "next/headers";
 import { cache } from "react";
@@ -28,3 +29,22 @@ export const protectedProcedure = baseProcedure.use(async ({ ctx, next }) => {
   }
   return next({ ctx: { ...ctx, auth: session } });
 });
+
+export const premiumProcedure = protectedProcedure.use(
+  async ({ ctx, next }) => {
+    const customer = await polarClient.customers.getStateExternal({
+      externalId: ctx.auth.user.id,
+    });
+
+    if (
+      !customer.activeSubscriptions ||
+      customer.activeSubscriptions.length === 0
+    ) {
+      throw new TRPCError({
+        code: "FORBIDDEN",
+        message: "You need a premium subscription",
+      });
+    }
+    return next({ ctx: { ...ctx, customer } });
+  },
+);

@@ -1,4 +1,4 @@
-import db from "@/lib/db";
+import db from "@/lib/db/db";
 import { createTRPCRouter, protectedProcedure } from "../init";
 
 export const usersRouter = createTRPCRouter({

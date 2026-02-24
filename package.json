@@ -14,7 +14,11 @@
     "prisma:migrate": "prisma migrate dev"
   },
   "dependencies": {
+    "@ai-sdk/google": "^3.0.30",
+    "@ai-sdk/react": "^3.0.99",
     "@hookform/resolvers": "^5.2.2",
+    "@polar-sh/better-auth": "^1.8.1",
+    "@polar-sh/sdk": "^0.44.0",
     "@prisma/adapter-pg": "^7.4.1",
     "@prisma/client": "^7.4.1",
     "@tanstack/react-query": "^5.90.21",
@@ -22,6 +26,7 @@
     "@trpc/next": "^11.10.0",
     "@trpc/react-query": "^11.10.0",
     "@trpc/server": "^11.10.0",
+    "ai": "^6.0.97",
     "better-auth": "^1.4.18",
     "class-variance-authority": "^0.7.1",
     "client-only": "^0.0.1",

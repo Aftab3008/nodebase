@@ -1,5 +1,5 @@
 import { AuthLayout } from "@/components/Layout/AuthLayout";
-import { requireUnAuth } from "@/lib/auth-utils";
+import { requireUnAuth } from "@/lib/auth/auth-utils";
 
 export default async function layout({
   children,
