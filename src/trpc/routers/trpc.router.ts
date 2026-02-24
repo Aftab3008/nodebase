@@ -3,8 +3,8 @@ import { usersRouter } from "./users.router";
 import { workflowRouter } from "./workflow.router";
 
 export const appRouter = createTRPCRouter({
-  usersRouter,
-  workflowRouter,
+  users: usersRouter,
+  workflows: workflowRouter,
 });
 
 export type AppRouter = typeof appRouter;

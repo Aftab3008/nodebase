@@ -25,7 +25,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
-import { useHasActiveSubscription } from "@/hooks/use-subscription";
+import { useHasActiveSubscription } from "@/hooks/subscriptions/use-subscription";
 
 const menuItems = [
   {
