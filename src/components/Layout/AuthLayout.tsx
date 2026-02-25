@@ -11,12 +11,12 @@ export const AuthLayout = ({ children }: { children: React.ReactNode }) => {
         >
           <Image
             src="/logos/logo.svg"
-            alt="Nodebase"
+            alt="Nexus"
             width={28}
             height={28}
             className="dark:invert pb-1.5"
           />
-          <span>Nodebase</span>
+          <span>Nexus</span>
         </Link>
         {children}
       </div>

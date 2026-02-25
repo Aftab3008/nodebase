@@ -18,8 +18,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "NodeBase",
-  description: "NodeBase is a platform for building and deploying AI agents.",
+  title: "Nexus",
+  description: "Nexus is a platform for building and deploying AI agents.",
 };
 
 export default function RootLayout({
