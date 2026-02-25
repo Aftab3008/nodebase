@@ -23,9 +23,12 @@ import {
 } from "@xyflow/react";
 import "@xyflow/react/dist/style.css";
 import { useCallback, useMemo, useState } from "react";
+import { useSetAtom } from "jotai";
+import { editorAtom } from "@/store/atoms";
 
 export default function Editor({ workflowId }: { workflowId: string }) {
   const [workflow] = useWorkflowById(workflowId);
+  const setEditor = useSetAtom(editorAtom);
   const [nodes, setNodes] = useState<Node[]>(workflow.nodes);
   const [edges, setEdges] = useState<Edge[]>(workflow.edges);
 
@@ -60,6 +63,7 @@ export default function Editor({ workflowId }: { workflowId: string }) {
         onEdgesChange={onEdgesChange}
         onConnect={onConnect}
         nodeTypes={nodeComponents}
+        onInit={setEditor}
         fitView
         snapGrid={[10, 10]}
         snapToGrid

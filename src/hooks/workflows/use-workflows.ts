@@ -40,13 +40,28 @@ export const useWorkflowById = (workflowId: string) => {
 export const useUpdateWorkflowName = () => {
   const utils = trpc.useUtils();
   return trpc.workflows.updateName.useMutation({
-    onSuccess: (_, variables) => {
+    onSuccess: (data) => {
       toast.success("Workflow name updated successfully");
-      void utils.workflows.getWorkflowById.invalidate({ id: variables.id });
+      void utils.workflows.getWorkflowById.invalidate({ id: data.id });
       void utils.workflows.getWorkflows.invalidate();
     },
     onError: () => {
       toast.error("Failed to update workflow name");
+    },
+  });
+};
+
+export const useUpdateWorkflow = () => {
+  const utils = trpc.useUtils();
+
+  return trpc.workflows.update.useMutation({
+    onSuccess: (data) => {
+      toast.success(`${data.name} saved successfully`);
+      void utils.workflows.getWorkflows.invalidate();
+      void utils.workflows.getWorkflowById.invalidate({ id: data.id });
+    },
+    onError: (error) => {
+      toast.error(`Failed to save: ${error.message}`);
     },
   });
 };

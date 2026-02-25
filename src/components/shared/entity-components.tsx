@@ -218,15 +218,41 @@ export const LoadingView = ({ message }: StateViewProps) => {
   );
 };
 
-export const ErrorView = ({ message }: StateViewProps) => {
+interface ErrorViewProps extends StateViewProps {
+  onRetry?: () => void;
+}
+
+export const ErrorView = ({ message, onRetry }: ErrorViewProps) => {
   return (
-    <div className="flex flex-col items-center justify-center flex-1 h-full gap-y-4">
-      <div className="flex flex-col items-center gap-y-3 p-8 rounded-xl border border-destructive/20 bg-destructive/5 backdrop-blur-sm">
-        <div className="flex items-center justify-center size-12 rounded-xl bg-destructive/10">
-          <AlertTriangleIcon className="size-6 text-destructive" />
+    <div className="flex flex-col items-center justify-center flex-1 h-full">
+      <div className="flex flex-col items-center gap-y-5 px-10 py-8 rounded-2xl border border-destructive/15 bg-linear-to-b from-destructive/4 to-transparent backdrop-blur-sm max-w-sm w-full text-center">
+        <div className="relative flex items-center justify-center">
+          <div className="absolute size-16 rounded-full bg-destructive/10 animate-ping animation-duration-[3s]" />
+          <div className="relative flex items-center justify-center size-14 rounded-full bg-destructive/10 ring-1 ring-destructive/20">
+            <AlertTriangleIcon className="size-6 text-destructive" />
+          </div>
         </div>
-        {!!message && (
-          <p className="text-sm text-muted-foreground font-medium">{message}</p>
+
+        <div className="flex flex-col gap-y-1.5">
+          <h3 className="text-sm font-semibold text-foreground">
+            Something went wrong
+          </h3>
+          {!!message && (
+            <p className="text-sm text-muted-foreground leading-relaxed">
+              {message}
+            </p>
+          )}
+        </div>
+
+        {!!onRetry && (
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={onRetry}
+            className="rounded-lg border-destructive/20 text-destructive hover:bg-destructive/10 hover:text-destructive transition-all duration-200 cursor-pointer"
+          >
+            Try again
+          </Button>
         )}
       </div>
     </div>
