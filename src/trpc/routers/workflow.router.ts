@@ -5,14 +5,45 @@ import {
   protectedProcedure,
 } from "../init";
 import { z } from "zod";
-import { PAGINATION } from "@/constants";
+import { PAGINATION, WORKFLOW_LIMITS } from "@/constants";
 import { TRPCError } from "@trpc/server";
 import { NodeType } from "@/generated/prisma/enums";
 import type { Edge, Node } from "@xyflow/react";
 import { inngest } from "@/inngest/client";
 
 export const workflowRouter = createTRPCRouter({
+  getWorkflowUsage: premiumProcedure.query(async ({ ctx }) => {
+    const currentCount = await db.workflow.count({
+      where: { userId: ctx.auth.user.id },
+    });
+
+    const maxWorkflows = ctx.hasSubscription
+      ? WORKFLOW_LIMITS.PRO
+      : WORKFLOW_LIMITS.FREE;
+
+    return {
+      currentCount,
+      maxWorkflows,
+      hasSubscription: ctx.hasSubscription,
+    };
+  }),
+
   createWorkflow: premiumProcedure.mutation(async ({ ctx }) => {
+    const currentCount = await db.workflow.count({
+      where: { userId: ctx.auth.user.id },
+    });
+
+    const maxWorkflows = ctx.hasSubscription
+      ? WORKFLOW_LIMITS.PRO
+      : WORKFLOW_LIMITS.FREE;
+
+    if (maxWorkflows !== null && currentCount >= maxWorkflows) {
+      throw new TRPCError({
+        code: "FORBIDDEN",
+        message: `You have reached the limit of ${maxWorkflows} workflows on the free plan. Upgrade to Pro for unlimited workflows.`,
+      });
+    }
+
     const workflow = await db.workflow.create({
       data: {
         name: "Untitled Workflow",

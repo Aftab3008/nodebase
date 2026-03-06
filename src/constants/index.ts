@@ -5,6 +5,11 @@ export const PAGINATION = {
   MIN_PAGE_SIZE: 1,
 };
 
+export const WORKFLOW_LIMITS = {
+  FREE: 5,
+  PRO: null,
+} as const;
+
 export const routeLabels: Record<string, string> = {
   "/workflows": "Workflows",
   "/credentials": "Credentials",

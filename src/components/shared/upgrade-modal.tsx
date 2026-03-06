@@ -25,8 +25,8 @@ export const UpgradeModal = ({ open, onOpenChange }: UpgradeModalProps) => {
         <AlertDialogHeader>
           <AlertDialogTitle>Upgrade to Pro</AlertDialogTitle>
           <AlertDialogDescription>
-            You need an active subscription to perform this action. Upgrade to
-            Pro to unlock all features
+            You&apos;ve reached your free plan limit. Upgrade to Pro to unlock
+            unlimited workflows and all premium features.
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>

@@ -7,12 +7,17 @@ export const useSuspenseWorkflows = () => {
   return trpc.workflows.getWorkflows.useSuspenseQuery(params);
 };
 
+export const useWorkflowUsage = () => {
+  return trpc.workflows.getWorkflowUsage.useQuery();
+};
+
 export const useCreateWorkflow = () => {
   const utils = trpc.useUtils();
   return trpc.workflows.createWorkflow.useMutation({
     onSuccess: () => {
       toast.success("Workflow created successfully");
       void utils.workflows.getWorkflows.invalidate();
+      void utils.workflows.getWorkflowUsage.invalidate();
     },
     onError: () => {
       toast.error("Failed to create workflow");
@@ -26,6 +31,7 @@ export const useRemoveWorkflow = () => {
     onSuccess: () => {
       toast.success("Workflow removed successfully");
       void utils.workflows.getWorkflows.invalidate();
+      void utils.workflows.getWorkflowUsage.invalidate();
     },
     onError: () => {
       toast.error("Failed to remove workflow");

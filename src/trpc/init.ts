@@ -37,15 +37,9 @@ export const premiumProcedure = protectedProcedure.use(
       externalId: ctx.auth.user.id,
     });
 
-    if (
-      !customer.activeSubscriptions ||
-      customer.activeSubscriptions.length === 0
-    ) {
-      throw new TRPCError({
-        code: "FORBIDDEN",
-        message: "You need a premium subscription",
-      });
-    }
-    return next({ ctx: { ...ctx, customer } });
+    const hasSubscription =
+      !!customer.activeSubscriptions && customer.activeSubscriptions.length > 0;
+
+    return next({ ctx: { ...ctx, customer, hasSubscription } });
   },
 );

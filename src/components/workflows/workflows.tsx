@@ -19,6 +19,7 @@ import {
   useCreateWorkflow,
   useRemoveWorkflow,
   useSuspenseWorkflows,
+  useWorkflowUsage,
 } from "@/hooks/workflows/use-workflows";
 import { Workflow } from "@/generated/prisma/client";
 import { useUpgradeModal } from "@/hooks/workflows/use-upgrade-modal";
@@ -66,6 +67,7 @@ export const WorkflowsHeader = ({ disabled }: { disabled?: boolean }) => {
   const router = useRouter();
   const createWorkflow = useCreateWorkflow();
   const { handleError, modal } = useUpgradeModal();
+  const { data: usage } = useWorkflowUsage();
 
   const handleCreate = () => {
     createWorkflow.mutate(undefined, {
@@ -89,7 +91,78 @@ export const WorkflowsHeader = ({ disabled }: { disabled?: boolean }) => {
         disabled={disabled}
         isCreating={createWorkflow.isPending}
       />
+      {usage && <WorkflowUsageBanner usage={usage} />}
     </>
+  );
+};
+
+const WorkflowUsageBanner = ({
+  usage,
+}: {
+  usage: {
+    currentCount: number;
+    maxWorkflows: number | null;
+    hasSubscription: boolean;
+  };
+}) => {
+  const { currentCount, maxWorkflows, hasSubscription } = usage;
+
+  if (hasSubscription) {
+    return (
+      <div className="flex items-center gap-2 text-xs text-muted-foreground px-1">
+        <span className="font-medium text-foreground">{currentCount}</span>{" "}
+        workflow{currentCount !== 1 ? "s" : ""} &middot;{" "}
+        <span className="text-primary font-medium">Pro plan (unlimited)</span>
+      </div>
+    );
+  }
+
+  const percentage = maxWorkflows ? (currentCount / maxWorkflows) * 100 : 0;
+  const isAtLimit = maxWorkflows !== null && currentCount >= maxWorkflows;
+  const isNearLimit = maxWorkflows !== null && currentCount >= maxWorkflows - 1;
+
+  return (
+    <div className="flex flex-col gap-2 rounded-lg border border-border/50 bg-muted/30 px-4 py-3">
+      <div className="flex items-center justify-between text-sm">
+        <span className="text-muted-foreground">
+          Workflows used:{" "}
+          <span
+            className={`font-semibold ${isAtLimit ? "text-destructive" : "text-foreground"}`}
+          >
+            {currentCount}
+          </span>{" "}
+          / {maxWorkflows}
+        </span>
+        {isAtLimit && (
+          <span className="text-xs font-medium text-destructive">
+            Limit reached
+          </span>
+        )}
+        {isNearLimit && !isAtLimit && (
+          <span className="text-xs font-medium text-amber-500">
+            Almost at limit
+          </span>
+        )}
+      </div>
+      <div className="h-2 w-full rounded-full bg-muted">
+        <div
+          className={`h-full rounded-full transition-all duration-300 ${
+            isAtLimit
+              ? "bg-destructive"
+              : isNearLimit
+                ? "bg-amber-500"
+                : "bg-primary"
+          }`}
+          style={{ width: `${Math.min(percentage, 100)}%` }}
+        />
+      </div>
+      {isAtLimit && (
+        <p className="text-xs text-muted-foreground">
+          Upgrade to <span className="font-medium text-primary">Pro</span> for
+          unlimited workflows.
+        </p>
+      )}
+    </div>
   );
 };
 
